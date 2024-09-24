@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Watery</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            width: 300px;
+            padding: 10px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            background-color: #f1f1f1;
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        .navbar button {
+            flex: 1;
+            padding: 10px;
+            margin: 0 5px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .navbar button:hover {
+            background-color: #0056b3;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .stat-section, #settingsSection {
+            margin-top: 20px;
+        }
+
+        #activePeriod {
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #activePeriod label {
+            margin-right: 10px;
+        }
+
+        button#saveSettings {
+            display: block;
+            margin: 0 auto;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Watery</h1>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <button id="openSettings">Settings</button>
+        <button id="openStats">Stats</button>
+    </div>
+
+    <!-- Settings Section -->
+    <div id="settingsSection" class="hidden">
+        <div class="input-group">
+            <label for="dailyGoal">Daily Water Goal (liters):</label>
+            <input type="number" id="dailyGoal" step="0.1" min="0.1" placeholder="e.g., 2.5">
+        </div>
+
+        <div class="input-group">
+            <label for="activePeriod">Active period:</label>
+            <div id="activePeriod">
+                <div>
+                    <label for="activeStart">From:</label>
+                    <input type="time" id="activeStart">
+                </div>
+                <div>
+                    <label for="activeEnd">To:</label>
+                    <input type="time" id="activeEnd">
+                </div>
+            </div>
+        </div>
+
+        <button id="saveSettings">Save Settings</button>
+    </div>
+
+    <!-- Stats Section -->
+    <div id="statsSection" class="stat-section hidden">
+        <h2>Statistics</h2>
+        <p>Today's Intake: <span id="intake">0</span> liters</p>
+        <p>Water Fact: <span id="waterFact"></span></p>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+
+</html>
