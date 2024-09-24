@@ -13,5 +13,10 @@
     },
     "background": {
         "service_worker": "background.js"
+    },
+    "icons": {
+        "16": "assets/logos/watery16.png",
+        "48": "assets/logos/watery48.png",
+        "128": "assets/logos/watery128.png"
     }
 }
