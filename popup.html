@@ -9,7 +9,8 @@
             font-family: Arial, sans-serif;
             width: 300px;
             padding: 10px;
-            background-color: #7dc0ff; /* Light aqua */
+            background-color: #7dc0ff;
+            /* Light aqua */
         }
 
         h1 {
@@ -32,24 +33,17 @@
             display: flex;
             align-items: center;
         }
-        
+
         .navbar-left img {
             margin-right: 10px;
         }
-        
+
         .navbar-icon {
             margin-left: 15px;
         }
 
-        .navbar-icon img {
-            filter: brightness(0) invert(0.5); 
-            color: #1c06df;
-            cursor: pointer;
-        }
-
         .navbar-icon img:hover {
-            filter: brightness(4) invert(1);
-            
+            filter: brightness(0) invert(1);
         }
 
         .hidden {
@@ -66,11 +60,29 @@
             margin-right: 10px;
         }
 
-        button#saveSettings {
-            display: block;
-            margin: 0 auto;
-            padding: 10px 20px;
+        #drinkWater {
+            background-color: #5a8dfc;
+            border: none;
+            color: white;
+            /* White text */
+            padding: 15px 32px;
+            /* Add some padding */
+            text-align: center;
+            /* Center the text */
+            text-decoration: none;
+            /* Remove underline */
+            display: inline-block;
+            /* Make the button inline */
+            font-size: 16px;
+            /* Increase font size */
             cursor: pointer;
+            border-radius: 10px;
+            transition-duration: 0.3s;
+        }
+
+        #drinkWater:hover {
+            background-color: white;
+            color: black;
         }
     </style>
 </head>
@@ -83,8 +95,8 @@
             <h1>Watery</h1>
         </div>
         <div>
-            <i class="navbar-icon" id="openStats"><img src="assets/icons/chart-timeline-variant-shimmer.svg" alt="Statistics icon"
-                    width="20">
+            <i class="navbar-icon" id="openStats"><img src="assets/icons/chart-timeline-variant-shimmer.svg"
+                    alt="Statistics icon" width="20">
             </i>
             <i class="navbar-icon" id="openSettings">
                 <img src="assets/icons/cog.svg" alt="Settings icon" id="openSettings" width="20">
@@ -94,12 +106,9 @@
 
     <!-- Main Section -->
     <div id="mainSection" class="hidden">
-        <h2>Drink Water</h2>
-        <p>Today's Intake: <span id="intake">0</span> liters</p>
-        <p>Click the button below to log 1 glass of water.</p>
-        <button id="drinkWater">Drink Water</button>
-
-        <p>Water Fact: <span id="waterFact"></span></p>
+        <h2>Water Fact: <span id="waterFact"></span></h2>
+        <h3>Today's Intake: <span id="intake">0</span> liters</h3>
+        <button id="drinkWater">Drink 100ml</button>
     </div>
 
     <!-- Settings Section -->
@@ -129,7 +138,7 @@
 
     <!-- Stats Section -->
     <div id="statsSection" class="stat-section">
-        <h2>Statistics</h2>    
+        <h2>Statistics</h2>
     </div>
 
     <script src="popup.js"></script>
