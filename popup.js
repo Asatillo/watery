@@ -4,8 +4,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const { dailyGoal, activeStart, activeEnd } = items;
 
         if (dailyGoal && activeStart && activeEnd) {
-            document.getElementById('settingsSection').classList.add('hidden');
             toggleSection('mainSection');
+        } else {
+            toggleSection('settingsSection');
         }
 
         // Fetch water fact and update intake
@@ -17,6 +18,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Navbar button event listeners
     document.getElementById('openSettings').addEventListener('click', () => {
+        chrome.storage.sync.get(['dailyGoal', 'activeStart', 'activeEnd'], (items) => {
+            const { dailyGoal, activeStart, activeEnd } = items;
+
+            // Fill the input fields with saved values
+            document.getElementById('dailyGoal').value = dailyGoal || '';
+            document.getElementById('activeStart').value = activeStart || '';
+            document.getElementById('activeEnd').value = activeEnd || '';
+        });
+
         toggleSection('settingsSection');
     });
 
@@ -31,24 +41,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('drinkWater').addEventListener('click', () => {
         const drinkAmountInput = document.getElementById('drinkAmount').value;
-        const drinkAmount = parseFloat(drinkAmountInput) / 1000;
-
+        const drinkAmount = parseFloat(drinkAmountInput) / 1000;  // Convert ml to liters
+    
         if (isNaN(drinkAmount) || drinkAmount <= 0) {
             alert('Please enter a valid amount of water (ml).');
             return;
         }
-
-        chrome.storage.sync.get(['intakeRecords'], (items) => {
+    
+        chrome.storage.sync.get(['intakeRecords', 'dailyGoal'], (items) => {
             let intakeRecords = items.intakeRecords || [];
             const now = new Date();
-
-            const newRecord = {
-                amount: drinkAmount,  // Amount entered by the user in liters
-                date: now.toISOString()  // Store the date as ISO string
-            };
-
-            intakeRecords.push(newRecord);
-
+            const todayDate = now.toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+    
+            // Check if there's already a record for today
+            const todayRecord = intakeRecords.find(record => record.date.split('T')[0] === todayDate);
+    
+            if (todayRecord) {
+                // If a record exists, update the amount
+                todayRecord.amount += drinkAmount;
+            } else {
+                // If no record exists, create a new one
+                const newRecord = {
+                    date: now.toISOString(),
+                    amount: drinkAmount,
+                    goal: items.dailyGoal || 0  // Use the daily goal if available, else default to 0
+                };
+                intakeRecords.push(newRecord);
+            }
+    
             // Save the updated records to chrome storage
             chrome.storage.sync.set({ intakeRecords: intakeRecords }, () => {
                 // Update the intake display after saving
@@ -72,7 +92,7 @@ function saveSettings() {
         }, () => {
             alert('Settings saved!');
             document.getElementById('settingsSection').classList.add('hidden');
-            showStats();
+            toggleSection('mainSection');
         });
     } else {
         alert('Please fill in all fields.');
@@ -103,28 +123,30 @@ function loadIntakeStatistics() {
         const intakeRecords = items.intakeRecords || [];
         const tableBody = document.querySelector("#intakeTable tbody");
 
-        // Clear existing table rows
-        tableBody.innerHTML = '';
+        tableBody.innerHTML = ''; // Clear existing table rows
 
         // Add each record as a row in the table
         intakeRecords.forEach(record => {
+            console.log(record);
             const row = document.createElement('tr');
             const dateCell = document.createElement('td');
             const amountCell = document.createElement('td');
+            const goalCell = document.createElement('td');
 
             // Format date for better readability
             const formattedDate = new Date(record.date).toLocaleDateString();
 
             dateCell.textContent = formattedDate;
-            amountCell.textContent = record.amount.toFixed(1) + ' L';  // Display amount in liters
+            amountCell.textContent = record.amount.toFixed(1) + ' L'; // Display amount in liters
+            goalCell.textContent = record.goal + ' L'; // Display daily goal in liters
 
             row.appendChild(dateCell);
             row.appendChild(amountCell);
+            row.appendChild(goalCell);
             tableBody.appendChild(row);
         });
     });
 }
-
 function toggleSection(sectionId) {
     const settingsSection = document.getElementById('settingsSection');
     const statsSection = document.getElementById('statsSection');
@@ -143,12 +165,6 @@ function toggleSection(sectionId) {
         statsSection.classList.add('hidden');
         settingsSection.classList.add('hidden');
     }
-}
-
-function showStats() {
-    document.getElementById('statsSection').classList.remove('hidden');
-    document.getElementById('settingsSection').classList.add('hidden');
-    document.getElementById('mainSection').classList.add('hidden');
 }
 
 const facts = [
