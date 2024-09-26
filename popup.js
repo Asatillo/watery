@@ -40,42 +40,43 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.getElementById('drinkWater').addEventListener('click', () => {
-        const drinkAmountInput = document.getElementById('drinkAmount').value;
-        const drinkAmount = parseFloat(drinkAmountInput) / 1000;  // Convert ml to liters
-    
+        const drinkAmountInput = document.getElementById('drinkAmount');
+        const drinkAmountInputValue = drinkAmountInput.value;
+        const drinkAmount = parseFloat(drinkAmountInputValue) / 1000; // Convert ml to liters
+
         if (isNaN(drinkAmount) || drinkAmount <= 0) {
             alert('Please enter a valid amount of water (ml).');
             return;
         }
-    
+
         chrome.storage.sync.get(['intakeRecords', 'dailyGoal'], (items) => {
             let intakeRecords = items.intakeRecords || [];
             const now = new Date();
-            const todayDate = now.toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
-    
-            // Check if there's already a record for today
-            const todayRecord = intakeRecords.find(record => record.date.split('T')[0] === todayDate);
-    
+            const today = now.toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+
+            // Check if a record for today already exists
+            const todayRecord = intakeRecords.find(record => record.date.split('T')[0] === today);
+
             if (todayRecord) {
-                // If a record exists, update the amount
+                // If the record exists, increment the amount
                 todayRecord.amount += drinkAmount;
             } else {
-                // If no record exists, create a new one
+                // If no record exists for today, create a new one
                 const newRecord = {
-                    date: now.toISOString(),
                     amount: drinkAmount,
-                    goal: items.dailyGoal || 0  // Use the daily goal if available, else default to 0
+                    date: now.toISOString(),
+                    goal: items.dailyGoal
                 };
                 intakeRecords.push(newRecord);
             }
-    
-            // Save the updated records to chrome storage
+
             chrome.storage.sync.set({ intakeRecords: intakeRecords }, () => {
-                // Update the intake display after saving
                 updateIntake();
+                drinkAmountInput.value = '';
             });
         });
     });
+
 
 });
 
@@ -105,16 +106,21 @@ function fetchRandomWaterFact() {
 }
 
 function updateIntake() {
-    chrome.storage.sync.get(['intakeRecords'], (items) => {
+    chrome.storage.sync.get(['intakeRecords', 'dailyGoal'], (items) => {
         const intakeRecords = items.intakeRecords || [];
-        const today = new Date().toISOString().split('T')[0];  // Get today's date in YYYY-MM-DD format
+        const dailyGoal = parseFloat(items.dailyGoal) || 0; // Get the daily goal
+        const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
 
-        // Filter the records for the current day and calculate total intake
+        // Filter the records for today and calculate total intake
         const todayIntake = intakeRecords
             .filter(record => record.date.split('T')[0] === today)
             .reduce((total, record) => total + record.amount, 0);
 
-        document.getElementById('intake').textContent = todayIntake.toFixed(1); // Round to 1 decimal place
+        document.getElementById('intake').textContent = todayIntake.toFixed(1); // Display today's intake
+
+        // Calculate how much is left to fulfill the daily goal
+        const remainingIntake = dailyGoal - todayIntake;
+        document.getElementById('remaining').textContent = remainingIntake > 0 ? remainingIntake.toFixed(1) : "0.0"; // Display remaining intake or zero
     });
 }
 
