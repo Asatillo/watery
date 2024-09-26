@@ -60,29 +60,42 @@
             margin-right: 10px;
         }
 
-        #drinkWater {
+        
+        #waterInputContainer {
+            display: flex;
+            align-items: center;
+            gap: 10px; /* Add some space between input and button */
+            margin-top: 10px; /* Space above the input container */
+        }
+        
+        .m-inp {
+            padding: 6px 7px;
+            font-size: 14px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+            transition: border-color 0.3s;
+        }
+        
+        .m-inp:focus {
+            outline: none;
+            border-color: #5a8dfc; /* Highlight input when focused */
+        }
+        
+        .m-btn {
             background-color: #5a8dfc;
             border: none;
             color: white;
-            /* White text */
-            padding: 15px 32px;
-            /* Add some padding */
-            text-align: center;
-            /* Center the text */
-            text-decoration: none;
-            /* Remove underline */
-            display: inline-block;
-            /* Make the button inline */
-            font-size: 16px;
-            /* Increase font size */
+            padding: 6px 7px;
+            font-size: 14px;
             cursor: pointer;
             border-radius: 10px;
-            transition-duration: 0.3s;
+            transition: background-color 0.3s, color 0.3s;
         }
-
-        #drinkWater:hover {
+        
+        .m-btn:hover {
             background-color: white;
-            color: black;
+            color: #5a8dfc;
         }
     </style>
 </head>
@@ -108,37 +121,48 @@
     <div id="mainSection" class="hidden">
         <h2>Water Fact: <span id="waterFact"></span></h2>
         <h3>Today's Intake: <span id="intake">0</span> liters</h3>
-        <button id="drinkWater">Drink 100ml</button>
+        <div id="waterInputContainer">
+            <input type="number" id="drinkAmount" class="m-inp" placeholder="Enter amount (ml)" min="50" step="50">
+            <button id="drinkWater" class="m-btn">Drink</button>
+        </div>
     </div>
 
     <!-- Settings Section -->
     <div id="settingsSection" class="hidden">
         <h2>Drinking plan</h2>
         <div class="input-group">
-            <label for="dailyGoal">Daily Water Goal (liters):</label>
-            <input type="number" id="dailyGoal" step="0.1" min="0.1" placeholder="e.g., 2.5">
+            <input type="number" id="dailyGoal" step="0.1" min="0.1" class="m-inp" placeholder="Daily Water Goal (liters):">
         </div>
 
         <div class="input-group">
-            <label for="activePeriod">Active period:</label>
+            <h3>Active period</h3>
             <div id="activePeriod">
                 <div>
-                    <label for="activeStart">From:</label>
-                    <input type="time" id="activeStart">
+                    <input type="time" class="m-inp" id="activeStart" placeholder="from:" >
                 </div>
                 <div>
-                    <label for="activeEnd">To:</label>
-                    <input type="time" id="activeEnd">
+                    <input type="time" class="m-inp" id="activeEnd" placeholder="to:">
                 </div>
             </div>
         </div>
 
-        <button id="saveSettings">Save Settings</button>
+        <button id="saveSettings" class="m-btn">Save</button>
     </div>
 
     <!-- Stats Section -->
     <div id="statsSection" class="stat-section">
         <h2>Statistics</h2>
+        <table id="intakeTable">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Amount (Liters)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Records will be dynamically inserted here -->
+            </tbody>
+        </table>
     </div>
 
     <script src="popup.js"></script>
