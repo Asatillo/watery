@@ -1,3 +1,5 @@
+const sections = document.querySelectorAll('.section');
+
 document.addEventListener('DOMContentLoaded', () => {
     // Check if daily goal and active period are set
     chrome.storage.sync.get(['dailyGoal', 'activeStart', 'activeEnd'], (items) => {
@@ -37,6 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('openMainPage').addEventListener('click', () => {
         toggleSection('mainSection');
+        updateIntake(); // Update intake when the main page is opened
     });
 
     document.getElementById('drinkWater').addEventListener('click', () => {
@@ -52,6 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
         chrome.storage.sync.get(['intakeRecords', 'dailyGoal'], (items) => {
             let intakeRecords = items.intakeRecords || [];
             const now = new Date();
+            console.log(now);
             const today = now.toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
 
             // Check if a record for today already exists
@@ -154,23 +158,14 @@ function loadIntakeStatistics() {
     });
 }
 function toggleSection(sectionId) {
-    const settingsSection = document.getElementById('settingsSection');
-    const statsSection = document.getElementById('statsSection');
-    const mainSection = document.getElementById('mainSection');
+    sections.forEach(section => section.classList.add('hidden'));
 
-    if (sectionId === 'settingsSection') {
-        settingsSection.classList.remove('hidden');
-        statsSection.classList.add('hidden');
-        mainSection.classList.add('hidden');
-    } else if (sectionId === 'statsSection') {
-        statsSection.classList.remove('hidden');
-        settingsSection.classList.add('hidden');
-        mainSection.classList.add('hidden');
-    } else if (sectionId === 'mainSection') {
-        mainSection.classList.remove('hidden');
-        statsSection.classList.add('hidden');
-        settingsSection.classList.add('hidden');
+    const targetSection = document.getElementById(sectionId);
+    if (targetSection) {
+        targetSection.classList.remove('hidden');
     }
+
+    window.location.hash = sectionId;
 }
 
 const facts = [
