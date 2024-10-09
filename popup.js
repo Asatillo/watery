@@ -2,10 +2,10 @@ const sections = document.querySelectorAll('.section');
 
 document.addEventListener('DOMContentLoaded', () => {
     // Check if daily goal and active period are set
-    chrome.storage.sync.get(['dailyGoal', 'activeStart', 'activeEnd'], (items) => {
-        const { dailyGoal, activeStart, activeEnd } = items;
+    chrome.storage.sync.get(['dailyGoal', 'reminderFrequency'], (items) => {
+        const { dailyGoal, reminderFrequency } = items;
 
-        if (dailyGoal && activeStart && activeEnd) {
+        if (dailyGoal && reminderFrequency) {
             toggleSection('mainSection');
         } else {
             toggleSection('settingsSection');
@@ -20,13 +20,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Navbar button event listeners
     document.getElementById('openSettings').addEventListener('click', () => {
-        chrome.storage.sync.get(['dailyGoal', 'activeStart', 'activeEnd'], (items) => {
-            const { dailyGoal, activeStart, activeEnd } = items;
+        chrome.storage.sync.get(['dailyGoal', 'reminderFrequency'], (items) => {
+            const { dailyGoal, reminderFrequency } = items;
 
             // Fill the input fields with saved values
             document.getElementById('dailyGoal').value = dailyGoal || '';
-            document.getElementById('activeStart').value = activeStart || '';
-            document.getElementById('activeEnd').value = activeEnd || '';
+            document.getElementById('reminderFrequency').value = reminderFrequency || '';
         });
 
         toggleSection('settingsSection');
@@ -86,22 +85,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function saveSettings() {
     const dailyGoal = document.getElementById('dailyGoal').value;
-    const activeStart = document.getElementById('activeStart').value;
-    const activeEnd = document.getElementById('activeEnd').value;
+    const reminderFrequency = document.getElementById('reminderFrequency').value;
 
-    if (dailyGoal && activeStart && activeEnd) {
+    if (dailyGoal && reminderFrequency) {
         chrome.storage.sync.set({
             dailyGoal: dailyGoal,
-            activeStart: activeStart,
-            activeEnd: activeEnd
+            reminderFrequency: reminderFrequency,
         }, () => {
-            alert('Settings saved!');
-            document.getElementById('settingsSection').classList.add('hidden');
+            setAlarm(reminderFrequency);
             toggleSection('mainSection');
         });
     } else {
         alert('Please fill in all fields.');
     }
+}
+
+function setAlarm(frequency) {
+    const minutes = parseFloat(frequency);
+    chrome.alarms.create({ periodInMinutes : 0.1 });
 }
 
 function fetchRandomWaterFact() {
