@@ -12,7 +12,8 @@
         "default_popup": "popup.html"
     },
     "background": {
-        "service_worker": "background.js"
+        "service_worker": "background.js",
+        "type": "module"
     },
     "icons": {
         "16": "assets/logos/watery16.png",
