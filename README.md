@@ -19,7 +19,7 @@ This Chrome extension helps users stay hydrated by reminding them to drink water
 1. Clone or download the source code to your local machine.
    
    ```bash
-   git clone https://github.com/your-repo/water-reminder-extension.git
+   git clone https://github.com/Asatillo/watery.git
     ```
 
 2. Open Google Chrome and go to `chrome://extensions/`.
