@@ -54,17 +54,6 @@ hr {
     display: none;
 }
 
-#activePeriod {
-    margin-top: 10px;
-    display: flex;
-    justify-content: space-between;
-}
-
-#activePeriod label {
-    margin-right: 10px;
-}
-
-
 #waterInputContainer {
     display: flex;
     align-items: center;
@@ -78,9 +67,9 @@ hr {
     padding: 6px 7px;
     font-size: 14px;
     border-radius: 8px;
+    width: 40%;
     border: 1px solid #ccc;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    /* Subtle shadow */
     transition: border-color 0.3s;
 }
 
@@ -146,4 +135,20 @@ hr {
 #intakeTable tbody tr:hover {
     background-color: #d1e7ff;
     transition: background-color 0.3s;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.input-group label {
+  margin-right: 10px;
+  width: 100px;    /* Set a fixed width for the label */
+}
+
+.input-group input {
+  flex-grow: 1; /* Allows the input to take up the remaining space */
+  padding: 5px;
 }

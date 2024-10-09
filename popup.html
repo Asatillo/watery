@@ -16,10 +16,10 @@
         </div>
         <div>
             <i class="navbar-icon" id="openStats"><img src="assets/icons/chart-timeline-variant-shimmer.svg"
-                    alt="Statistics icon" width="20">
+                    alt="Statistics icon" width="23">
             </i>
             <i class="navbar-icon" id="openSettings">
-                <img src="assets/icons/cog.svg" alt="Settings icon" id="openSettings" width="20">
+                <img src="assets/icons/cog.svg" alt="Settings icon" id="openSettings" width="23">
             </i>
         </div>
     </div>
@@ -30,32 +30,25 @@
         <h3>Today's Intake: <span id="intake">0</span> liters</h3>
         <h3>Remaining to reach goal: <span id="remaining">0</span> liters</h3>
         <div id="waterInputContainer">
-            <input type="number" id="drinkAmount" class="m-inp" placeholder="Enter amount (ml)" min="50" step="50">
+            <input type="number" id="drinkAmount" class="m-inp" placeholder="amount (ml)" min="50" step="50">
             <button id="drinkWater" class="m-btn">Drink</button>
         </div>
+        <hr>
+        <h2>Water Fact: <span id="waterFact"></span></h2>
     </div>
 
     <!-- Settings Section -->
     <div id="settingsSection" class="section hidden">
-        <h2>Drinking plan</h2>
+        <h2>Settings</h2>
         <div class="input-group">
-            <input type="number" id="dailyGoal" step="0.1" min="0.1" class="m-inp"
-                placeholder="Daily Water Goal (liters):">
+            <label for="reminderPeriod">Reminder Frequency(minutes):</label>
+            <input type="number" id="reminderFrequency" class="m-inp">
+        </div>
+        <div class="input-group">
+            <label for="dailyGoal">Daily Goal (liters):</label>
+            <input type="number" id="dailyGoal" step="0.1" min="0.1" class="m-inp">
         </div>
 
-        <div class="input-group">
-            <h3>Active period</h3>
-            <div id="activePeriod">
-                <div>
-                    <label for="activeStart">from:</label>
-                    <input type="time" class="m-inp" id="activeStart">
-                </div>
-                <div>
-                    <label for="activeEnd">to:</label>
-                    <input type="time" class="m-inp" id="activeEnd">
-                </div>
-            </div>
-        </div>
 
         <!-- Wrap the button in a div -->
         <div class="button-container">
